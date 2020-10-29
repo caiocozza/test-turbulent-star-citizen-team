@@ -1,0 +1,17 @@
+redis:
+  image: redis
+  container_name: storage
+  expose:
+    - 6379
+
+server:
+  links:
+    - redis
+  build: ./
+  ports:
+    - 3000:3000
+  environment:
+    - REDIS_URL=redis://storage
+    - PORT=3000
+  command:
+    sh -c 'yarn build && node dist/src/app.js'
